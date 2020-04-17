@@ -8,9 +8,9 @@ onready var peace_timer = $PeaceTimer
 var attacking = false
 
 func _ready():
-	state_machine.start("relax")
+	state_machine.start("idle")
 func peaceTimerTimeout():
-	state_machine.travel("relax")
+	state_machine.travel("idle")
 func attack():
 	state_machine.travel("attack")
 	peace_timer.start()
@@ -28,5 +28,6 @@ func is_on_hit_yaxis(body):
 
 func on_body_entered(body):
 	if attacking:
+		print(attacking)
 		if body.name == "Demon" and is_on_hit_yaxis(body):
 			body.getHit()
