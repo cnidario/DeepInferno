@@ -1,0 +1,184 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
+[ext_resource path="res://Scenes/Sword.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 5, 11 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 116, 42, 8, 21 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "attack"
+length = 0.5
+loop = true
+tracks/0/type = "bezier"
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.134843, -4.67984, 9, -0.0794772, 2.13479, 0.0553448, -9.02848, 0, -0.116983, 1.13437, 0.25, 0 ),
+"times": PoolRealArray( 0.001, 0.2, 0.5 )
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"values": [ {
+"args": [  ],
+"method": "attack_started"
+}, {
+"args": [  ],
+"method": "attack_peak"
+} ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "not_prepared"
+length = 0.001
+
+[sub_resource type="Animation" id=4]
+resource_name = "prepare-attack"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 0.307786, 1 ),
+"update": 0,
+"values": [ 0.0, 90.0 ]
+}
+
+[sub_resource type="Animation" id=12]
+resource_name = "prepared"
+length = 0.001
+
+[sub_resource type="Animation" id=5]
+resource_name = "relax"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 90.0, 0.0 ]
+}
+
+[sub_resource type="ParticlesMaterial" id=6]
+flag_disable_z = true
+direction = Vector3( 0, 1, 0 )
+spread = 70.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 160.0
+initial_velocity_random = 0.57
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 30.0
+hue_variation = 0.31
+hue_variation_random = 0.48
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "attack"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "prepare-attack"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "prepared"
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "relax"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=9]
+states/attack/node = SubResource( 7 )
+states/attack/position = Vector2( 719, 50 )
+states/prepare-attack/node = SubResource( 8 )
+states/prepare-attack/position = Vector2( 256, 50 )
+states/prepared/node = SubResource( 14 )
+states/prepared/position = Vector2( 491, 50 )
+states/relax/node = SubResource( 15 )
+states/relax/position = Vector2( 491, 160 )
+transitions = [ "prepare-attack", "prepared", SubResource( 16 ), "prepared", "attack", SubResource( 19 ), "attack", "prepared", SubResource( 20 ), "prepared", "relax", SubResource( 21 ), "relax", "prepare-attack", SubResource( 22 ) ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=10]
+
+[node name="Sword" type="KinematicBody2D"]
+scale = Vector2( 0.5, 0.5 )
+collision_layer = 8
+collision_mask = 4
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -11 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 0, -11 )
+texture = SubResource( 2 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/attack = SubResource( 3 )
+anims/not_prepared = SubResource( 11 )
+anims/prepare-attack = SubResource( 4 )
+anims/prepared = SubResource( 12 )
+anims/relax = SubResource( 5 )
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( -1.90735e-06, -22 )
+emitting = false
+amount = 24
+lifetime = 2.0
+one_shot = true
+explosiveness = 0.98
+local_coords = false
+process_material = SubResource( 6 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 9 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 10 )
+
+[node name="PeaceTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, -11 )
+shape = SubResource( 1 )
+[connection signal="timeout" from="PeaceTimer" to="." method="peaceTimerTimeout"]
+[connection signal="body_entered" from="Area2D" to="." method="on_body_entered"]
