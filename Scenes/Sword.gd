@@ -21,7 +21,12 @@ func attack_peak():
 	attacking = false
 func attack_started():
 	attacking = true
+	
+func is_on_hit_yaxis(body):
+	var ydst = global_position.y - body.global_position.y
+	return ydst <0 and ydst > -8
+
 func on_body_entered(body):
 	if attacking:
-		if body.name == "Demon":
+		if body.name == "Demon" and is_on_hit_yaxis(body):
 			body.getHit()
