@@ -11,7 +11,7 @@ export var state: Dictionary = {
 const SPEED = 75
 const ACCELERATION = 150
 const EPSILON = 5
-var velocity: Vector2 = Vector2.ZERO 
+var velocity: Vector2 = Vector2.ZERO
 var weapon
 
 onready var state_machine = animation_tree.get("parameters/playback")
@@ -58,7 +58,7 @@ func attack():
 func _physics_process(delta):
 	var input = get_input()
 	if Input.is_action_just_pressed("action"):
-		attack();
+		attack()
 	var new_moving_state = calc_movement(input)
 	if is_walking(new_moving_state):
 		animation_tree["parameters/conditions/walking"] = true

@@ -196,3 +196,4 @@ parameters/conditions/walking = false
 
 [node name="BounceBehaviour" parent="." instance=ExtResource( 3 )]
 target = NodePath("..")
+property = "velocity:x"
