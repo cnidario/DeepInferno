@@ -5,7 +5,7 @@
 [ext_resource path="res://sprites/dungeon_tileset.tres" type="TileSet" id=3]
 [ext_resource path="res://Scenes/Demon.tscn" type="PackedScene" id=4]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=2]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
 [node name="Level1" type="Node2D"]
 
@@ -34,7 +34,7 @@ scale = Vector2( 2, 2 )
 scale = Vector2( 0.625, 0.625 )
 
 [node name="AnimationTree" parent="YSort/Player" index="2"]
-parameters/playback = SubResource( 2 )
+parameters/playback = SubResource( 1 )
 
 [node name="Demon" parent="YSort" instance=ExtResource( 4 )]
 position = Vector2( 88.282, -5.45399 )

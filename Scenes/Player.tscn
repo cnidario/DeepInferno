@@ -1,7 +1,8 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=2]
+[ext_resource path="res://Components/BounceBehaviour.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 5.06577, 7.72644 )
@@ -192,3 +193,6 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 22 )
 parameters/conditions/walking = false
+
+[node name="BounceBehaviour" parent="." instance=ExtResource( 3 )]
+target = NodePath("..")
