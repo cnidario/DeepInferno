@@ -7,7 +7,6 @@ func _ready():
 	pass
 
 func getHit():
-	print("no me jodas")
 	hp_bar.setHP(hp_bar.hp - 10)
 	animation_player.play("hit")
 	

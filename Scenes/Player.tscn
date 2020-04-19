@@ -1,11 +1,119 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=2]
-[ext_resource path="res://Components/BounceBehaviour.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sprites/shadow.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 5.06577, 1.65315 )
+extents = Vector2( 1.98625, 1.65315 )
+
+[sub_resource type="Animation" id=29]
+resource_name = "bounce"
+
+[sub_resource type="Animation" id=24]
+resource_name = "fall"
+length = 5.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Character/Sprite:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 720.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Character/Hand:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 1800.0, 2520.0 ]
+}
+
+[sub_resource type="Animation" id=23]
+resource_name = "fall-start"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Character/Sprite:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( -2, 1 ),
+"update": 0,
+"values": [ 0.0, 1800.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Character/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = false
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( -2, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.5, 0.5 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Character/Hand:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( -5, 1 ),
+"update": 0,
+"values": [ 0.0, 1800.0 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Character/Hand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( -5, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.4, 0.4 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Character/Hand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 3 ),
+"transitions": PoolRealArray( -5, 1 ),
+"update": 0,
+"values": [ Vector2( 4.46118, -3.06631 ), Vector2( 8, 0 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Character:z_index")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, -1 ]
+}
 
 [sub_resource type="Animation" id=3]
 resource_name = "idle"
@@ -97,6 +205,12 @@ tracks/1/keys = {
 "values": [ 0.0, -2.0, 0.0, -2.0, 0.0 ]
 }
 
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "fall-start"
+
+[sub_resource type="AnimationNodeAnimation" id=26]
+animation = "fall"
+
 [sub_resource type="AnimationNodeAnimation" id=7]
 animation = "idle"
 
@@ -126,16 +240,25 @@ switch_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+switch_mode = 2
+
 [sub_resource type="AnimationNodeStateMachine" id=21]
+states/fall/node = SubResource( 26 )
+states/fall/position = Vector2( -188.613, 192.784 )
+states/fall-start/node = SubResource( 25 )
+states/fall-start/position = Vector2( -74.613, 102.784 )
 states/idle/node = SubResource( 7 )
-states/idle/position = Vector2( 105, 134 )
+states/idle/position = Vector2( 108, 134 )
 states/turn-left/node = SubResource( 8 )
 states/turn-left/position = Vector2( 315, 40 )
 states/turn-right/node = SubResource( 9 )
 states/turn-right/position = Vector2( 295, 245 )
 states/walk-cycle/node = SubResource( 10 )
 states/walk-cycle/position = Vector2( 473, 134 )
-transitions = [ "idle", "turn-left", SubResource( 11 ), "idle", "turn-right", SubResource( 12 ), "turn-left", "idle", SubResource( 13 ), "turn-right", "idle", SubResource( 14 ), "walk-cycle", "idle", SubResource( 15 ), "idle", "walk-cycle", SubResource( 18 ) ]
+transitions = [ "idle", "turn-left", SubResource( 11 ), "idle", "turn-right", SubResource( 12 ), "turn-left", "idle", SubResource( 13 ), "turn-right", "idle", SubResource( 14 ), "walk-cycle", "idle", SubResource( 15 ), "idle", "walk-cycle", SubResource( 18 ), "idle", "fall-start", SubResource( 27 ), "fall-start", "fall", SubResource( 28 ) ]
 graph_offset = Vector2( -338.613, 16.784 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=22]
@@ -149,6 +272,11 @@ collision_layer = 2
 collision_mask = 4
 script = ExtResource( 2 )
 
+[node name="Shadow" type="Sprite" parent="."]
+position = Vector2( -0.0829658, 0.28221 )
+scale = Vector2( 0.96081, 0.96081 )
+texture = ExtResource( 3 )
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -1.78745 )
 rotation = 3.14159
@@ -157,6 +285,9 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
+anims/bounce = SubResource( 29 )
+anims/fall = SubResource( 24 )
+anims/fall-start = SubResource( 23 )
 anims/idle = SubResource( 3 )
 anims/turn-left = SubResource( 4 )
 anims/turn-right = SubResource( 5 )
@@ -167,17 +298,14 @@ tree_root = SubResource( 21 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/playback = SubResource( 22 )
-parameters/conditions/walking = false
-
-[node name="BounceBehaviour" parent="." instance=ExtResource( 3 )]
-target = NodePath("..")
-property = "velocity:x"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 smoothing_enabled = true
 
 [node name="Character" type="Node2D" parent="."]
+position = Vector2( 0, -9.53674e-06 )
+rotation = -4.99343e-07
 
 [node name="Sprite" type="Sprite" parent="Character"]
 position = Vector2( 0, -8 )
@@ -185,3 +313,4 @@ texture = SubResource( 2 )
 
 [node name="Hand" type="Position2D" parent="Character"]
 position = Vector2( 4.46118, -3.06631 )
+rotation = 31.4159
