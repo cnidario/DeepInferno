@@ -17,9 +17,8 @@ var weapon
 onready var state_machine = animation_tree.get("parameters/playback")
 
 func _ready():
-	animation_tree["parameters/conditions/walking"] = false
 	state_machine.start("idle")
-	weapon = $CollisionShape2D/Hand/Sword
+	weapon = $Character/Hand/Sword
 	
 func turning_ended():
 	state.turning = false
@@ -60,20 +59,19 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("action"):
 		attack()
 	var new_moving_state = calc_movement(input)
-	if is_walking(new_moving_state):
-		animation_tree["parameters/conditions/walking"] = true
+	var turn_to = must_turn(state.facing, new_moving_state)
+	if state.turning:
+		pass
+	elif turn_to:
+		state.facing = new_moving_state
+		state.turning = true
+		state_machine.travel(turn_to)
+	elif is_walking(new_moving_state):
 		state.moving = "walking"
 		state_machine.travel("walk-cycle")
-		var turn_to = must_turn(state.facing, new_moving_state)
-		if turn_to:
-			state.facing = new_moving_state
-			state.turning = true
-			state_machine.travel(turn_to)
-	else:
-		if state_machine.get_current_node() and state_machine.get_current_node() != "idle":
-			state_machine.travel("idle")
+	elif state.moving != "idle":
+		state_machine.travel("idle")
 		state.moving = "idle"
-		animation_tree["parameters/conditions/walking"] = false
 	
 	var new_velocity = velocity
 	if is_walking(new_moving_state):

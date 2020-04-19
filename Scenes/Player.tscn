@@ -1,15 +1,11 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=2]
 [ext_resource path="res://Components/BounceBehaviour.tscn" type="PackedScene" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 5.06577, 7.72644 )
-
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 1 )
-region = Rect2( 66.945, 128.689, 10.2021, 16.1426 )
+extents = Vector2( 5.06577, 1.65315 )
 
 [sub_resource type="Animation" id=3]
 resource_name = "idle"
@@ -19,7 +15,7 @@ loop = true
 resource_name = "turn-left"
 length = 0.3
 tracks/0/type = "value"
-tracks/0/path = NodePath("CollisionShape2D:scale")
+tracks/0/path = NodePath("Character:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -49,7 +45,7 @@ tracks/1/keys = {
 resource_name = "turn-right"
 length = 0.3
 tracks/0/type = "bezier"
-tracks/0/path = NodePath("CollisionShape2D:scale:x")
+tracks/0/path = NodePath("Character:scale:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -76,35 +72,29 @@ tracks/1/keys = {
 [sub_resource type="Animation" id=6]
 length = 0.4
 loop = true
-tracks/0/type = "bezier"
-tracks/0/path = NodePath("CollisionShape2D:position:x")
+tracks/0/type = "value"
+tracks/0/path = NodePath("Character:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 )
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -6.0, 0.0, 6.0, 0.0 ]
 }
-tracks/1/type = "bezier"
-tracks/1/path = NodePath("CollisionShape2D:position:y")
+tracks/1/type = "value"
+tracks/1/path = NodePath("Character:position:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"points": PoolRealArray( -7.92895, -0.25, 0, 0.25, 0, -8.86679, -0.25, 0, 0.25, 0, -7.92895, -0.25, 0, 0.25, 0, -8.86679, -0.25, 0, 0.25, 0, -7.92895, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 )
-}
-tracks/2/type = "bezier"
-tracks/2/path = NodePath("CollisionShape2D:rotation_degrees")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
-"points": PoolRealArray( 0, -0.25, 0, 0.25, 0, -6.01132, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0, 5.64336, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 )
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -2.0, 0.0, -2.0, 0.0 ]
 }
 
 [sub_resource type="AnimationNodeAnimation" id=7]
@@ -134,21 +124,7 @@ auto_advance = true
 [sub_resource type="AnimationNodeStateMachineTransition" id=15]
 switch_mode = 2
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=16]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=17]
-switch_mode = 2
-auto_advance = true
-advance_condition = "walking"
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=19]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=20]
-switch_mode = 2
-auto_advance = true
-advance_condition = "walking"
 
 [sub_resource type="AnimationNodeStateMachine" id=21]
 states/idle/node = SubResource( 7 )
@@ -159,10 +135,14 @@ states/turn-right/node = SubResource( 9 )
 states/turn-right/position = Vector2( 295, 245 )
 states/walk-cycle/node = SubResource( 10 )
 states/walk-cycle/position = Vector2( 473, 134 )
-transitions = [ "idle", "turn-left", SubResource( 11 ), "idle", "turn-right", SubResource( 12 ), "turn-left", "idle", SubResource( 13 ), "turn-right", "idle", SubResource( 14 ), "walk-cycle", "idle", SubResource( 15 ), "walk-cycle", "turn-left", SubResource( 16 ), "turn-left", "walk-cycle", SubResource( 17 ), "idle", "walk-cycle", SubResource( 18 ), "walk-cycle", "turn-right", SubResource( 19 ), "turn-right", "walk-cycle", SubResource( 20 ) ]
-graph_offset = Vector2( -338.613, -14.896 )
+transitions = [ "idle", "turn-left", SubResource( 11 ), "idle", "turn-right", SubResource( 12 ), "turn-left", "idle", SubResource( 13 ), "turn-right", "idle", SubResource( 14 ), "walk-cycle", "idle", SubResource( 15 ), "idle", "walk-cycle", SubResource( 18 ) ]
+graph_offset = Vector2( -338.613, 16.784 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=22]
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 1 )
+region = Rect2( 66.945, 128.689, 10.2021, 16.1426 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
@@ -170,15 +150,10 @@ collision_mask = 4
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -7.92895 )
+position = Vector2( 0, -1.78745 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
 shape = SubResource( 1 )
-
-[node name="Sprite" type="Sprite" parent="CollisionShape2D"]
-position = Vector2( 0, -0.0710468 )
-texture = SubResource( 2 )
-
-[node name="Hand" type="Position2D" parent="CollisionShape2D"]
-position = Vector2( 4.46118, 4.86264 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
@@ -197,3 +172,16 @@ parameters/conditions/walking = false
 [node name="BounceBehaviour" parent="." instance=ExtResource( 3 )]
 target = NodePath("..")
 property = "velocity:x"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+
+[node name="Character" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite" parent="Character"]
+position = Vector2( 0, -8 )
+texture = SubResource( 2 )
+
+[node name="Hand" type="Position2D" parent="Character"]
+position = Vector2( 4.46118, -3.06631 )

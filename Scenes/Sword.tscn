@@ -3,14 +3,11 @@
 [ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Sword.gd" type="Script" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 5, 11 )
-
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 1 )
 region = Rect2( 116, 42, 8, 21 )
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=2]
 resource_name = "attack"
 length = 0.25
 loop = true
@@ -45,10 +42,10 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 resource_name = "idle"
 
-[sub_resource type="ParticlesMaterial" id=5]
+[sub_resource type="ParticlesMaterial" id=4]
 flag_disable_z = true
 direction = Vector3( 0, 1, 0 )
 spread = 70.0
@@ -61,44 +58,41 @@ damping = 30.0
 hue_variation = 0.31
 hue_variation_random = 0.48
 
-[sub_resource type="AnimationNodeAnimation" id=6]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "attack"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=6]
 animation = "idle"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
 switch_mode = 2
 auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachine" id=10]
-states/attack/node = SubResource( 6 )
+[sub_resource type="AnimationNodeStateMachine" id=9]
+states/attack/node = SubResource( 5 )
 states/attack/position = Vector2( 390, 99 )
-states/idle/node = SubResource( 7 )
+states/idle/node = SubResource( 6 )
 states/idle/position = Vector2( 202, 99 )
-transitions = [ "idle", "attack", SubResource( 8 ), "attack", "idle", SubResource( 9 ) ]
+transitions = [ "idle", "attack", SubResource( 7 ), "attack", "idle", SubResource( 8 ) ]
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=11]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 
-[node name="Sword" type="KinematicBody2D"]
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 5, 11 )
+
+[node name="Sword" type="Node2D"]
 scale = Vector2( 0.5, 0.5 )
-collision_layer = 8
-collision_mask = 4
 script = ExtResource( 2 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -11 )
-shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -11 )
-texture = SubResource( 2 )
+texture = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/attack = SubResource( 3 )
-anims/idle = SubResource( 4 )
+anims/attack = SubResource( 2 )
+anims/idle = SubResource( 3 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
 position = Vector2( -1.90735e-06, -22 )
@@ -108,21 +102,23 @@ lifetime = 2.0
 one_shot = true
 explosiveness = 0.98
 local_coords = false
-process_material = SubResource( 5 )
+process_material = SubResource( 4 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 10 )
+tree_root = SubResource( 9 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 11 )
+parameters/playback = SubResource( 10 )
 
 [node name="PeaceTimer" type="Timer" parent="."]
 wait_time = 1.5
 one_shot = true
 
 [node name="Area2D" type="Area2D" parent="."]
+position = Vector2( 0, -10 )
+scale = Vector2( -0.402432, 0.573705 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2( 0, -11 )
-shape = SubResource( 1 )
+shape = SubResource( 11 )
 [connection signal="timeout" from="PeaceTimer" to="." method="peaceTimerTimeout"]

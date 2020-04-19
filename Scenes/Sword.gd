@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Node2D
 
 onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
