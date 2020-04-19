@@ -4,6 +4,7 @@ onready var animation_player = $AnimationPlayer
 onready var animation_tree = $AnimationTree
 onready var character = $Character
 onready var shadow = $Shadow
+onready var enemy_collider_detector = $EnemyColliderDetector
 
 export var state: Dictionary = {
 	moving = "idle",
@@ -11,6 +12,7 @@ export var state: Dictionary = {
 	turning = false,
 	falling = false,
 	jumping = false,
+	bouncing = 0,
 }
 const SPEED = 75
 const ACCELERATION = 150
@@ -18,7 +20,8 @@ const EPSILON = 5
 var velocity: Vector2 = Vector2.ZERO
 var original_y
 export var z = 0
-var jump_velocity = 0
+var z_velocity = 0
+const bouncing_velocities = [10, 30, 50, 70]
 var weapon
 
 onready var state_machine = animation_tree.get("parameters/playback")
@@ -28,17 +31,32 @@ func _ready():
 	weapon = $Character/Hand/Sword
 	original_y = character.position.y
 
-func process_jump(delta):
-	z += jump_velocity * delta
+func process_pseudoz(delta):
+	z += z_velocity * delta
 	if z < 0:
 		z = 0
-		jump_velocity = 0
+		z_velocity = 0
+	z_velocity -= 300*delta
+
+func process_jump(delta):
+	process_pseudoz(delta)
+	if z == 0:
 		state.jumping = false
-	jump_velocity -= 300*delta
-	print(jump_velocity)
+
+func process_bouncing(delta):
+	process_pseudoz(delta)
+	velocity = velocity - velocity.normalized()*20*delta
+	if z == 0:
+		z_velocity = bouncing_velocities[state.bouncing - 1]
+		state.bouncing -= 1
+
+func bounce(jump_vel, bounce_direction):
+	state.bouncing = 3
+	z_velocity = jump_vel
+	velocity = bounce_direction*bouncing_velocities[3]
 
 func jump():
-	jump_velocity = 100
+	z_velocity = 100
 	state.jumping = true
 
 func fall():
@@ -88,14 +106,18 @@ func _physics_process(delta):
 		attack()
 	var new_moving_state = calc_movement(input)
 	var turn_to = must_turn(state.facing, new_moving_state)
-	if state.turning or state.falling:
+	if state.bouncing > 0:
+		process_bouncing(delta)
+	else:
+		if enemy_collider_detector.get_overlapping_bodies().size() > 0:
+			bounce(80, -velocity.normalized())
+	if state.jumping:
+		process_jump(delta)
+	if state.turning or state.falling or state.bouncing != 0:
 		pass
 	else:
-		if Input.is_action_just_pressed("jump"):
+		if Input.is_action_just_pressed("jump") and !state.jumping:
 			jump()
-		if state.jumping:
-			print("proc jump")
-			process_jump(delta)
 		if turn_to:
 			state.facing = new_moving_state
 			state.turning = true
@@ -110,10 +132,14 @@ func _physics_process(delta):
 	var new_velocity = velocity
 	if state.falling:
 		new_velocity = velocity - velocity * 1.8 * delta
+	elif state.bouncing != 0:
+		pass
 	elif is_walking(new_moving_state):
 		new_velocity = velocity + ACCELERATION * input * delta
+		# cap max speed
 		if new_velocity.length_squared() > SPEED*SPEED:
 			new_velocity = new_velocity.normalized() * SPEED
+	# deccelerate
 	elif velocity.length_squared() > EPSILON*4:
 		new_velocity = velocity - ACCELERATION * 2 * velocity.normalized() * delta
 	else:

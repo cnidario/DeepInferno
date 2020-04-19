@@ -53,11 +53,9 @@ position = Vector2( 148.859, 65.727 )
 scale = Vector2( 0.5, 0.5 )
 
 [node name="Player" parent="YSort" instance=ExtResource( 2 )]
-position = Vector2( -8.922, 6.13281 )
 scale = Vector2( 2, 2 )
-collision_mask = 5
 
-[node name="AnimationTree" parent="YSort/Player" index="2"]
+[node name="AnimationTree" parent="YSort/Player" index="4"]
 parameters/playback = SubResource( 1 )
 
 [node name="Sword" parent="YSort/Player/Character/Hand" index="0" instance=ExtResource( 1 )]
@@ -65,6 +63,7 @@ parameters/playback = SubResource( 1 )
 [node name="Demon" parent="YSort" instance=ExtResource( 4 )]
 position = Vector2( 88.282, -5.45399 )
 scale = Vector2( 2, 2 )
+collision_layer = 4
 [connection signal="body_entered" from="TileMap/FallAreaDetector" to="TileMap/FallAreaDetector" method="_on_body_entered"]
 
 [editable path="YSort/Player"]

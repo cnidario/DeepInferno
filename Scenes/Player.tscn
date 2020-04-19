@@ -269,13 +269,23 @@ region = Rect2( 66.945, 128.689, 10.2021, 16.1426 )
 
 [node name="Player" type="KinematicBody2D"]
 collision_layer = 2
-collision_mask = 4
 script = ExtResource( 2 )
 
 [node name="Shadow" type="Sprite" parent="."]
 position = Vector2( -0.0829658, 0.28221 )
 scale = Vector2( 0.96081, 0.96081 )
 texture = ExtResource( 3 )
+
+[node name="EnemyColliderDetector" type="Area2D" parent="."]
+position = Vector2( 0, -1.78745 )
+rotation = 3.14159
+scale = Vector2( 1, -1 )
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyColliderDetector"]
+rotation = 2.38419e-07
+shape = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -1.78745 )
