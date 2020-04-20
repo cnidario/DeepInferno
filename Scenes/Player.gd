@@ -54,6 +54,7 @@ func bounce(jump_vel, bounce_direction):
 	state.bouncing = 3
 	z_velocity = jump_vel
 	velocity = bounce_direction*bouncing_velocities[3]
+	animation_player.play("bounce")
 
 func jump():
 	z_velocity = 100

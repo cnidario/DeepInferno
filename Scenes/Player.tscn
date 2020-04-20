@@ -1,16 +1,29 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://sprites/0x72_16x16DungeonTileset.v3.png" type="Texture" id=1]
 [ext_resource path="res://Scenes/Player.gd" type="Script" id=2]
 [ext_resource path="res://sprites/shadow.png" type="Texture" id=3]
+[ext_resource path="res://Shaders/VFXHit.tres" type="Material" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 1.98625, 1.65315 )
 
-[sub_resource type="Animation" id=29]
+[sub_resource type="Animation" id=2]
 resource_name = "bounce"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Character/Sprite:material")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ ExtResource( 4 ), null ]
+}
 
-[sub_resource type="Animation" id=24]
+[sub_resource type="Animation" id=3]
 resource_name = "fall"
 length = 5.0
 loop = true
@@ -39,7 +52,7 @@ tracks/1/keys = {
 "values": [ 1800.0, 2520.0 ]
 }
 
-[sub_resource type="Animation" id=23]
+[sub_resource type="Animation" id=4]
 resource_name = "fall-start"
 length = 3.0
 tracks/0/type = "value"
@@ -115,12 +128,10 @@ tracks/5/keys = {
 "values": [ 0, -1 ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "idle"
+[sub_resource type="Animation" id=5]
 loop = true
 
-[sub_resource type="Animation" id=4]
-resource_name = "turn-left"
+[sub_resource type="Animation" id=6]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("Character:scale")
@@ -149,8 +160,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "turn-right"
+[sub_resource type="Animation" id=7]
 length = 0.3
 tracks/0/type = "bezier"
 tracks/0/path = NodePath("Character:scale:x")
@@ -177,7 +187,7 @@ tracks/1/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=8]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -205,65 +215,65 @@ tracks/1/keys = {
 "values": [ 0.0, -2.0, 0.0, -2.0, 0.0 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=25]
+[sub_resource type="AnimationNodeAnimation" id=9]
 animation = "fall-start"
 
-[sub_resource type="AnimationNodeAnimation" id=26]
+[sub_resource type="AnimationNodeAnimation" id=10]
 animation = "fall"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=11]
 animation = "idle"
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=12]
 animation = "turn-left"
 
-[sub_resource type="AnimationNodeAnimation" id=9]
+[sub_resource type="AnimationNodeAnimation" id=13]
 animation = "turn-right"
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=14]
 animation = "walk-cycle"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=11]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=12]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=13]
-switch_mode = 2
-auto_advance = true
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=14]
-switch_mode = 2
-auto_advance = true
-
 [sub_resource type="AnimationNodeStateMachineTransition" id=15]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
 switch_mode = 2
+auto_advance = true
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
+switch_mode = 2
+auto_advance = true
 
-[sub_resource type="AnimationNodeStateMachineTransition" id=27]
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
 switch_mode = 2
 
-[sub_resource type="AnimationNodeStateMachine" id=21]
-states/fall/node = SubResource( 26 )
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id=23]
+states/fall/node = SubResource( 10 )
 states/fall/position = Vector2( -188.613, 192.784 )
-states/fall-start/node = SubResource( 25 )
+states/fall-start/node = SubResource( 9 )
 states/fall-start/position = Vector2( -74.613, 102.784 )
-states/idle/node = SubResource( 7 )
+states/idle/node = SubResource( 11 )
 states/idle/position = Vector2( 108, 134 )
-states/turn-left/node = SubResource( 8 )
+states/turn-left/node = SubResource( 12 )
 states/turn-left/position = Vector2( 315, 40 )
-states/turn-right/node = SubResource( 9 )
+states/turn-right/node = SubResource( 13 )
 states/turn-right/position = Vector2( 295, 245 )
-states/walk-cycle/node = SubResource( 10 )
+states/walk-cycle/node = SubResource( 14 )
 states/walk-cycle/position = Vector2( 473, 134 )
-transitions = [ "idle", "turn-left", SubResource( 11 ), "idle", "turn-right", SubResource( 12 ), "turn-left", "idle", SubResource( 13 ), "turn-right", "idle", SubResource( 14 ), "walk-cycle", "idle", SubResource( 15 ), "idle", "walk-cycle", SubResource( 18 ), "idle", "fall-start", SubResource( 27 ), "fall-start", "fall", SubResource( 28 ) ]
+transitions = [ "idle", "turn-left", SubResource( 15 ), "idle", "turn-right", SubResource( 16 ), "turn-left", "idle", SubResource( 17 ), "turn-right", "idle", SubResource( 18 ), "walk-cycle", "idle", SubResource( 19 ), "idle", "walk-cycle", SubResource( 20 ), "idle", "fall-start", SubResource( 21 ), "fall-start", "fall", SubResource( 22 ) ]
 graph_offset = Vector2( -338.613, 16.784 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=22]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=24]
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 1 )
 region = Rect2( 66.945, 128.689, 10.2021, 16.1426 )
 
@@ -295,31 +305,32 @@ shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/bounce = SubResource( 29 )
-anims/fall = SubResource( 24 )
-anims/fall-start = SubResource( 23 )
-anims/idle = SubResource( 3 )
-anims/turn-left = SubResource( 4 )
-anims/turn-right = SubResource( 5 )
-anims/walk-cycle = SubResource( 6 )
+anims/bounce = SubResource( 2 )
+anims/fall = SubResource( 3 )
+anims/fall-start = SubResource( 4 )
+anims/idle = SubResource( 5 )
+anims/turn-left = SubResource( 6 )
+anims/turn-right = SubResource( 7 )
+anims/walk-cycle = SubResource( 8 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 21 )
+tree_root = SubResource( 23 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
-parameters/playback = SubResource( 22 )
+parameters/playback = SubResource( 24 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 smoothing_enabled = true
 
 [node name="Character" type="Node2D" parent="."]
+material = ExtResource( 4 )
 position = Vector2( 0, -9.53674e-06 )
 rotation = -4.99343e-07
 
 [node name="Sprite" type="Sprite" parent="Character"]
 position = Vector2( 0, -8 )
-texture = SubResource( 2 )
+texture = SubResource( 25 )
 
 [node name="Hand" type="Position2D" parent="Character"]
 position = Vector2( 4.46118, -3.06631 )
