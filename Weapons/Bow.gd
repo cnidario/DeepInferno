@@ -2,6 +2,8 @@ extends Node2D
 
 onready var arrow_proto = $ArrowPrototype
 onready var arrows_parent = $Arrows
+onready var explosion_proto = $Explosion
+onready var explosions_parent = $Explosions
 var arrows = []
 export var facing = "right" setget set_facing
 
@@ -25,10 +27,11 @@ func shoot():
 	if facing == "left":
 		arrow_vel *= -1
 	arrow.linear_velocity = arrow_vel
-	arrows.append({obj = arrow, life = 3})
+	var arrow_entry = {obj = arrow, life = 3}
+	arrows.append(arrow_entry)
 	arrows_parent.add_child(arrow)
 	var hit_detector = arrow.get_node("HitDetector")
-	hit_detector.connect("body_entered", self, "_on_body_entered", [arrows.size() - 1])
+	hit_detector.connect("body_entered", self, "_on_body_entered", [arrow_entry])
 	
 func is_main_scene():
 	return get_parent() == get_tree().root
@@ -45,19 +48,27 @@ func age_arrows(delta):
 		arrows.remove(delete_ix)
 		arrow.obj.queue_free()
 
+func prune_explosions():
+	if !explosions_parent.get_children():
+		for explosion in explosions_parent.get_children():
+			if !explosion.emitting:
+				explosion.queue_free()
+
 func _process(delta):
 	if is_main_scene():
 		if Input.is_action_just_released("action"):
 			shoot()
 	age_arrows(delta)
+	prune_explosions()
 
 
-func _on_body_entered(body, arrow_ix):
-	print("body entered")
-	print(body.name)
+func _on_body_entered(body, arrow_entry):
 	if body.name == "Demon":
-		var arrow = arrows[arrow_ix]
-		arrows.remove(arrow_ix)
-		arrow.obj.queue_free()
+		arrow_entry.life = 0
+		var explosion = explosion_proto.duplicate(0)
+		explosion.emitting = true
+		explosion.visible = true
+		explosion.global_position = arrow_entry.obj.global_position
+		explosions_parent.add_child(explosion)
 		body.getHit(10)
 

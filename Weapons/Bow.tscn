@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://sprites/roguelikeitems.png" type="Texture" id=1]
 [ext_resource path="res://Weapons/Bow.gd" type="Script" id=2]
@@ -10,6 +10,22 @@ region = Rect2( 176, 145, 15, 15 )
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 4.51461, 0.945671 )
+
+[sub_resource type="Gradient" id=3]
+colors = PoolColorArray( 0.973633, 0.0532455, 0.0532455, 1, 1, 0.539856, 0.34375, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.22
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 363.1
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 4 )
 
 [node name="Bow" type="Node2D"]
 position = Vector2( -0.0944672, -2.55063 )
@@ -47,4 +63,16 @@ rotation = 3.14159
 scale = Vector2( 1.01453, 1.01453 )
 shape = SubResource( 2 )
 
+[node name="Explosion" type="Particles2D" parent="."]
+visible = false
+scale = Vector2( 1, 1 )
+emitting = false
+amount = 32
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.96
+process_material = SubResource( 5 )
+
 [node name="Arrows" type="Node" parent="."]
+
+[node name="Explosions" type="Node" parent="."]
