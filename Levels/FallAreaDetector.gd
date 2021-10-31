@@ -8,5 +8,4 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.name == "Player":
-		print("guaje vas cayer")
 		body.fall()

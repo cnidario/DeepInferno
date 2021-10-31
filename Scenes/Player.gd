@@ -5,6 +5,10 @@ onready var animation_tree = $AnimationTree
 onready var character = $Character
 onready var shadow = $Shadow
 onready var enemy_collider_detector = $EnemyColliderDetector
+onready var hand = $Character/Hand
+
+onready var bow_proto: PackedScene = preload('res://Weapons/Bow.tscn')
+onready var sword_proto: PackedScene = preload('res://Weapons/Sword.tscn')
 
 export var state: Dictionary = {
 	moving = "idle",
@@ -13,6 +17,7 @@ export var state: Dictionary = {
 	falling = false,
 	jumping = false,
 	bouncing = 0,
+	weapon = null,
 }
 const SPEED = 75
 const ACCELERATION = 150
@@ -22,15 +27,29 @@ var original_y
 export var z = 0
 var z_velocity = 0
 const bouncing_velocities = [10, 30, 50, 70]
-var weapon
 
 onready var state_machine = animation_tree.get("parameters/playback")
 
 func _ready():
 	state_machine.start("idle")
-	weapon = $Character/Hand/Sword
+	var sword = sword_proto.instance()
+	hand.add_child(sword)
+	state.weapon = sword
 	original_y = character.position.y
 
+func cycle_next_weapon():
+	if state.weapon.name == "Sword":
+		state.weapon.queue_free()
+		var bow = bow_proto.instance()
+		hand.add_child(bow)
+		state.weapon = bow
+	elif state.weapon.name == "Bow":
+		state.weapon.queue_free()
+		var sword = sword_proto.instance()
+		hand.add_child(sword)
+		state.weapon = sword
+	state.weapon.facing = state.facing
+		
 func process_pseudoz(delta):
 	z += z_velocity * delta
 	if z < 0:
@@ -68,6 +87,7 @@ func fall():
 
 func turning_ended():
 	state.turning = false
+	state.weapon.facing = state.facing
 
 func get_input():
 	var x = Input.get_action_strength("right") - Input.get_action_strength("left")
@@ -98,13 +118,11 @@ func calc_movement(input: Vector2):
 		return "right"
 		
 func attack():
-	weapon.attack()
+	state.weapon.attack()
 	
 func _physics_process(delta):
 	character.position.y = original_y
 	var input = get_input()
-	if Input.is_action_just_pressed("action"):
-		attack()
 	var new_moving_state = calc_movement(input)
 	var turn_to = must_turn(state.facing, new_moving_state)
 	if state.bouncing > 0:
@@ -117,8 +135,12 @@ func _physics_process(delta):
 	if state.turning or state.falling or state.bouncing != 0:
 		pass
 	else:
+		if Input.is_action_just_pressed("action"):
+			attack()
 		if Input.is_action_just_pressed("jump") and !state.jumping:
 			jump()
+		if Input.is_action_just_pressed("next_weapon"):
+			cycle_next_weapon()
 		if turn_to:
 			state.facing = new_moving_state
 			state.turning = true

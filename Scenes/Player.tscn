@@ -133,6 +133,7 @@ loop = true
 
 [sub_resource type="Animation" id=6]
 length = 0.3
+step = 0.15
 tracks/0/type = "value"
 tracks/0/path = NodePath("Character:scale")
 tracks/0/interp = 1
@@ -140,10 +141,10 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.3 ),
-"transitions": PoolRealArray( 1, 1 ),
+"times": PoolRealArray( 0, 0.15, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( -1, 1 ) ]
+"values": [ Vector2( 1, 1 ), Vector2( 0, 1 ), Vector2( 1, 1 ) ]
 }
 tracks/1/type = "method"
 tracks/1/path = NodePath(".")
@@ -159,32 +160,83 @@ tracks/1/keys = {
 "method": "turning_ended"
 } ]
 }
+tracks/2/type = "value"
+tracks/2/path = NodePath("Character/Sprite:flip_h")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.15 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Character/Hand:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 4.461, -3.066 ), Vector2( -4.461, -3.066 ) ]
+}
 
 [sub_resource type="Animation" id=7]
 length = 0.3
-tracks/0/type = "bezier"
-tracks/0/path = NodePath("Character:scale:x")
+step = 0.15
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( -1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0 ),
-"times": PoolRealArray( 0, 0.3 )
-}
-tracks/1/type = "method"
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
 "times": PoolRealArray( 0.3 ),
 "transitions": PoolRealArray( 1 ),
 "values": [ {
 "args": [  ],
 "method": "turning_ended"
 } ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Character/Sprite:flip_h")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.15 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Character:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.15, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0, 1 ), Vector2( 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Character/Hand:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( -4.461, -3.066 ), Vector2( 4.461, -3.066 ) ]
 }
 
 [sub_resource type="Animation" id=8]
@@ -333,5 +385,5 @@ position = Vector2( 0, -8 )
 texture = SubResource( 25 )
 
 [node name="Hand" type="Position2D" parent="Character"]
-position = Vector2( 4.46118, -3.06631 )
+position = Vector2( 4.461, -3.066 )
 rotation = 31.4159
