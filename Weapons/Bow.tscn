@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://sprites/roguelikeitems.png" type="Texture" id=1]
+[ext_resource path="res://Weapons/Bow.gd" type="Script" id=2]
+[ext_resource path="res://sprites/arrow_01e.png" type="Texture" id=3]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 1 )
+region = Rect2( 176, 145, 15, 15 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 4.51461, 0.945671 )
+
+[sub_resource type="Gradient" id=3]
+colors = PoolColorArray( 0.973633, 0.0532455, 0.0532455, 1, 1, 0.539856, 0.34375, 1 )
+
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+lifetime_randomness = 0.22
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 98, 0 )
+initial_velocity = 363.1
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 4 )
+
+[node name="Bow" type="Node2D"]
+position = Vector2( -0.0944672, -2.55063 )
+scale = Vector2( 0.75, 0.75 )
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 0.785397
+texture = SubResource( 1 )
+
+[node name="ArrowPrototype" type="RigidBody2D" parent="."]
+visible = false
+collision_layer = 8
+mass = 0.306122
+gravity_scale = 0.1
+sleeping = true
+
+[node name="Sprite" type="Sprite" parent="ArrowPrototype"]
+rotation = 2.35619
+scale = Vector2( 0.608136, 0.644687 )
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArrowPrototype"]
+position = Vector2( 2.39562, 0 )
+scale = Vector2( -1.01453, -1.01453 )
+shape = SubResource( 2 )
+
+[node name="HitDetector" type="Area2D" parent="ArrowPrototype"]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ArrowPrototype/HitDetector"]
+position = Vector2( 2.39562, 0 )
+rotation = 3.14159
+scale = Vector2( 1.01453, 1.01453 )
+shape = SubResource( 2 )
+
+[node name="Explosion" type="Particles2D" parent="."]
+visible = false
+scale = Vector2( 1, 1 )
+emitting = false
+amount = 32
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.96
+process_material = SubResource( 5 )
+
+[node name="Arrows" type="Node" parent="."]
+
+[node name="Explosions" type="Node" parent="."]
